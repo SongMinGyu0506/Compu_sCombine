@@ -12,7 +12,8 @@ import kotlin.collections.HashMap
 
 @Service
 class UserServiceImpl(private val userRepository: UserRepository,
-                      private val tokenProvider: TokenProvider): UserService {
+                      private val tokenProvider: TokenProvider,
+                      private val redisDao: RedisDao): UserService {
 
     override fun getUser(id: Long): User? {
         val userOptional: Optional<User> = userRepository.findById(id)
@@ -53,5 +54,11 @@ class UserServiceImpl(private val userRepository: UserRepository,
 
     override fun getEmailById(id: Long): String {
         return userRepository.findUserById(id).email
+    }
+
+    override fun logout(id: Long, response: HttpServletResponse) {
+        redisDao.deleteValue(id.toString())
+        response.setHeader("Authorization",null)
+        response.setHeader("refreshToken",null)
     }
 }

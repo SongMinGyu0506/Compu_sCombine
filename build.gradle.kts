@@ -26,16 +26,23 @@ repositories {
 }
 
 dependencies {
+	//Springboot basic
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+
+	//kotlin basic
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	compileOnly("org.projectlombok:lombok")
+	// https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+
+	//Database
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("com.mysql:mysql-connector-j")
-	annotationProcessor("org.projectlombok:lombok")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
 	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
@@ -47,13 +54,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.jsoup/jsoup
 	implementation("org.jsoup:jsoup:1.13.1")
 	implementation ("com.opencsv:opencsv:4.4")
-	// https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-	implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
 
-
-
+	implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 }
 
 tasks.withType<KotlinCompile> {

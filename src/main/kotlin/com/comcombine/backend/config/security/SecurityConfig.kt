@@ -24,7 +24,9 @@ class SecurityConfig(private val objectMapper: ObjectMapper, private val jwtAuth
             httpBasic { disable() }
             cors { disable() }
             authorizeRequests {
+                authorize("/swagger-ui.html/**",permitAll)
                 authorize("/h2-console/**",permitAll)
+                authorize("/swagger-resources/**",permitAll)
                 // 다른 경로에 대한 규칙 설정
             }
             headers { frameOptions { disable() } }
