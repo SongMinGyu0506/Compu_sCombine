@@ -1,5 +1,7 @@
 package com.comcombine.backend.config.security
 
+import com.comcombine.backend.config.except.JwtCustomException
+import io.jsonwebtoken.ExpiredJwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -31,20 +33,23 @@ class JwtAuthenticationFilter(private val tokenProvider: TokenProvider):OncePerR
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        try {
-            val token: String? = parseBearerToken(request)
-            if (token != null && token != "null") {
-                val userId = tokenProvider.validateAndGetUserId(token)
-                val authentication:AbstractAuthenticationToken = UsernamePasswordAuthenticationToken(userId,null,AuthorityUtils.NO_AUTHORITIES)
-                authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
-                val securityContext: SecurityContext = SecurityContextHolder.createEmptyContext()
-                securityContext.authentication = authentication
-                SecurityContextHolder.setContext(securityContext)
-
-            }
-        } catch (e: Exception) {
-            logger.error("Could not set user authentication in security context",e)
+        if (request.getHeader("Authorization") != null) {
+            val userId = tokenProvider.validateAndGetUserId(request,response)
+            val authentication:AbstractAuthenticationToken = UsernamePasswordAuthenticationToken(userId,null,AuthorityUtils.NO_AUTHORITIES)
+            authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
+            val securityContext: SecurityContext = SecurityContextHolder.createEmptyContext()
+            securityContext.authentication = authentication
+            SecurityContextHolder.setContext(securityContext)
         }
+//        val token: String? = parseBearerToken(request)
+//        if (token != null && token != "null") {
+//            val userId = tokenProvider.validateAndGetUserId(request)
+//            val authentication:AbstractAuthenticationToken = UsernamePasswordAuthenticationToken(userId,null,AuthorityUtils.NO_AUTHORITIES)
+//            authentication.details = WebAuthenticationDetailsSource().buildDetails(request)
+//            val securityContext: SecurityContext = SecurityContextHolder.createEmptyContext()
+//            securityContext.authentication = authentication
+//            SecurityContextHolder.setContext(securityContext)
+//        }
         filterChain.doFilter(request,response)
     }
 }

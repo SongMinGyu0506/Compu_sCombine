@@ -15,7 +15,7 @@ import org.springframework.security.web.AuthenticationEntryPoint
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(private val objectMapper: ObjectMapper, private val jwtAuthenticationFilter: JwtAuthenticationFilter) {
+class SecurityConfig(private val objectMapper: ObjectMapper, private val jwtAuthenticationFilter: JwtAuthenticationFilter, private val exceptionHandlerFilter: ExceptionHandlerFilter) {
     @Bean
     fun filterChain(http: HttpSecurity) : SecurityFilterChain {
         http {
@@ -40,7 +40,10 @@ class SecurityConfig(private val objectMapper: ObjectMapper, private val jwtAuth
                     objectMapper.writeValue(response.outputStream,data)
                 }
             }
-            addFilterAfter<CorsFilter>(jwtAuthenticationFilter)
+//            addFilterAfter<CorsFilter>(jwtAuthenticationFilter)
+//            addFilterAfter<JwtAuthenticationFilter>(exceptionHandlerFilter)
+            addFilterAfter<CorsFilter>(exceptionHandlerFilter)
+            addFilterAfter<ExceptionHandlerFilter>(jwtAuthenticationFilter)
         }
         return http.build()
     }

@@ -21,4 +21,10 @@ class GlobalExceptionalHandler {
         ex.printStackTrace()
         return ResponseEntity(ExceptionWrapper.makeResponse(ex,request, HttpStatus.INTERNAL_SERVER_ERROR),HttpStatus.INTERNAL_SERVER_ERROR)
     }
+
+    @ExceptionHandler(JwtCustomException::class)
+    fun jwtException(ex:Exception, request: WebRequest):ResponseEntity<*> {
+        ex.printStackTrace()
+        return ResponseEntity(ExceptionWrapper.makeResponse(ex,request,HttpStatus.UNAUTHORIZED),HttpStatus.UNAUTHORIZED)
+    }
 }
