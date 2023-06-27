@@ -46,6 +46,11 @@ dependencies {
 	implementation("org.seleniumhq.selenium:selenium-java:3.141.59")
 	// https://mvnrepository.com/artifact/org.jsoup/jsoup
 	implementation("org.jsoup:jsoup:1.13.1")
+	implementation ("com.opencsv:opencsv:4.4")
+	// https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
 
 
 

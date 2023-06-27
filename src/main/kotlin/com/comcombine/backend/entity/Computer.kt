@@ -14,7 +14,6 @@ open class Computer(
     @Id @GeneratedValue open var id: Long = 0,
     open var price: String,
     open var originalUrl: String,
-    open var searchTag: String
 ) {
 
 }
