@@ -55,8 +55,11 @@ dependencies {
 	implementation("org.jsoup:jsoup:1.13.1")
 	implementation ("com.opencsv:opencsv:4.4")
 
+// https://mvnrepository.com/artifact/org.projectlombok/lombok
+	compileOnly("org.projectlombok:lombok:1.18.24")
 
 	implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
+//	implementation("org.springdoc:springdoc-openapi-kotlin:1.4.3")
 }
 
 tasks.withType<KotlinCompile> {
