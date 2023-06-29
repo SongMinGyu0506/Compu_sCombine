@@ -11,4 +11,5 @@ interface UserRepository : JpaRepository<User,Long> {
     override fun findById(id: Long) : Optional<User>
     fun findByEmailAndPassword(email: String, password: String) : Optional<User>
     fun findUserById(id:Long):User
+    fun existsByEmail(email: String) : Boolean
 }

@@ -27,4 +27,10 @@ class GlobalExceptionalHandler {
         ex.printStackTrace()
         return ResponseEntity(ExceptionWrapper.makeResponse(ex,request,HttpStatus.UNAUTHORIZED),HttpStatus.UNAUTHORIZED)
     }
+
+    @ExceptionHandler(UserConflictException::class)
+    fun userConflictException(ex:Exception, request: WebRequest):ResponseEntity<*> {
+        ex.printStackTrace()
+        return ResponseEntity(ExceptionWrapper.makeResponse(ex,request,HttpStatus.CONFLICT),HttpStatus.CONFLICT)
+    }
 }

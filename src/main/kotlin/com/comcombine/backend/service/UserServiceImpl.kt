@@ -1,5 +1,6 @@
 package com.comcombine.backend.service
 
+import com.comcombine.backend.config.except.UserConflictException
 import com.comcombine.backend.config.security.TokenProvider
 import com.comcombine.backend.dao.RedisDao
 import com.comcombine.backend.dto.UserDto
@@ -24,6 +25,9 @@ class UserServiceImpl(private val userRepository: UserRepository,
     }
 
     override fun makeUser(user: User): User {
+        if (userRepository.existsByEmail(user.email)) {
+            throw UserConflictException("User already exists")
+        }
         userRepository.save(user)
         return user
     }
@@ -60,5 +64,9 @@ class UserServiceImpl(private val userRepository: UserRepository,
         redisDao.deleteValue(id.toString())
         response.setHeader("Authorization",null)
         response.setHeader("refreshToken",null)
+    }
+
+    override fun saveComputer(): User {
+        TODO("Not yet implemented")
     }
 }

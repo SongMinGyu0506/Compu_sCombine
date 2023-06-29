@@ -11,4 +11,5 @@ interface UserService {
     fun login(email: String, password: String, response:HttpServletResponse) : HashMap<String,Any>
     fun getEmailById(id: Long): String
     fun logout(id:Long, response: HttpServletResponse)
+    fun saveComputer(): User
 }
