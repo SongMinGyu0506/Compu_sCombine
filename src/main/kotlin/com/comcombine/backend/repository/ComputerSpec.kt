@@ -10,12 +10,12 @@ class ComputerSpec {
     companion object {
         fun equalType(type: String): Specification<Computer> {
             return Specification {
-                    root: Root<Computer>, _: CriteriaQuery<*>, builder: CriteriaBuilder -> builder.equal(root.get<String>("type"), type)
+                    root: Root<Computer>, _: CriteriaQuery<*>, builder: CriteriaBuilder -> builder.equal(root.get<String>("comType"), type)
             }
         }
         fun likeName(name: String): Specification<Computer> {
             return Specification {
-                root: Root<Computer>, _: CriteriaQuery<*>, criteriaBuilder: CriteriaBuilder -> criteriaBuilder.like(root.get<String>("name"), name)
+                root, query, criteriaBuilder -> criteriaBuilder.like(root.get("name"), "%$name%")
             }
         }
     }

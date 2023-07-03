@@ -38,4 +38,9 @@ class GlobalExceptionalHandler {
     fun userNotFoundException(ex:Exception, request: WebRequest):ResponseEntity<*> {
         return exceptionWrapper(ex,request,HttpStatus.BAD_REQUEST)
     }
+
+    @ExceptionHandler(ComputerInvalidDataException::class)
+    fun computerInvalidDataException(ex:Exception, request: WebRequest):ResponseEntity<*> {
+        return exceptionWrapper(ex,request,HttpStatus.BAD_REQUEST)
+    }
 }

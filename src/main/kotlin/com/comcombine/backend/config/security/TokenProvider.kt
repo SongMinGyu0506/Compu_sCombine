@@ -24,7 +24,7 @@ class TokenProvider(private val redisDao: RedisDao) {
             val claims: Jws<Claims> = Jwts.parser().setSigningKey(JWT_KEY).parseClaimsJws(token)
             !claims.body.expiration.before(Date())
         } catch (e: ExpiredJwtException) {
-            e.printStackTrace()
+            //e.printStackTrace()
             false
         }
     }

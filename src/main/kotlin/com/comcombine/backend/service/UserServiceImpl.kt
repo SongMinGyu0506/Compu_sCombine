@@ -1,12 +1,16 @@
 package com.comcombine.backend.service
 
+import com.comcombine.backend.config.except.ComputerInvalidDataException
 import com.comcombine.backend.config.except.UserConflictException
+import com.comcombine.backend.config.except.UserNotFoundException
 import com.comcombine.backend.config.security.TokenProvider
 import com.comcombine.backend.dao.RedisDao
 import com.comcombine.backend.dto.UserDto
+import com.comcombine.backend.entity.Computer
 import com.comcombine.backend.entity.User
 import com.comcombine.backend.repository.UserRepository
 import jakarta.servlet.http.HttpServletResponse
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import java.util.*
 import kotlin.collections.HashMap
@@ -66,7 +70,22 @@ class UserServiceImpl(private val userRepository: UserRepository,
         response.setHeader("refreshToken",null)
     }
 
-    override fun saveComputer(): User {
-        TODO("Not yet implemented")
+    override fun saveComputer(id:Long, computers:List<Computer>): User {
+        val userOptional: Optional<User> = userRepository.findById(id)
+        val user: User
+        try {
+            user = userOptional.get()
+        } catch (ex: Exception) {
+            throw UserNotFoundException("User not found")
+        }
+        computers.forEach { computer ->
+            user.computers.add(computer)
+        }
+        try {
+            return userRepository.save(user)
+        } catch (ex: DataIntegrityViolationException) {
+            throw ComputerInvalidDataException("이미 존재하는 부품 추가")
+        }
+        
     }
 }
