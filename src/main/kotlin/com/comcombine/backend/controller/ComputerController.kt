@@ -1,5 +1,6 @@
 package com.comcombine.backend.controller
 
+import com.comcombine.backend.config.annotation.AuthPoint
 import com.comcombine.backend.config.response.ResponseEntityWrapper
 import com.comcombine.backend.dto.ComputerDto
 import com.comcombine.backend.entity.Computer
@@ -18,6 +19,7 @@ class ComputerController(
     private val userService: UserService,
     private val computerService: ComputerService
 ) {
+    @AuthPoint
     @GetMapping("")
     @Operation(summary = "컴퓨터 부품 검색", description = "컴퓨터 부품을 검색합니다.")
     @ApiResponses(value = [
@@ -32,6 +34,7 @@ class ComputerController(
         return ResponseEntityWrapper.okResponse(computerList)
     }
 
+    @AuthPoint
     @PostMapping("/member")
     @Operation(summary = "컴퓨터 부품 리스트 계정 등록", description = "사용자의 계정에 컴퓨터 부품을 등록합니다.")
     @ApiResponses(value = [
@@ -45,6 +48,7 @@ class ComputerController(
         return ResponseEntityWrapper.createResponse("/user/{id}",id, ComputerDto.ComputerListResponseDto.entityToDto(computerList))
     }
 
+    @AuthPoint
     @GetMapping("/member")
     @Operation(summary = "계정 부품리스트 호출", description = "사용자가 계정에 저장한 부품리스트를 불러옵니다.")
     @ApiResponses(value = [
@@ -56,6 +60,7 @@ class ComputerController(
         return ResponseEntityWrapper.okResponse(computerService.getComputerDataInUser(id))
     }
 
+    @AuthPoint
     @DeleteMapping("/member")
     @Operation(summary = "계정 등록 부품데이터 삭제", description = "계정에 등록한 부품 데이터를 ID 값으로 삭제합니다.")
     @ApiResponses(value = [

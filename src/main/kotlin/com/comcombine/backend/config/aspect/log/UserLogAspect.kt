@@ -1,5 +1,7 @@
 package com.comcombine.backend.config.aspect.log
 
+import com.comcombine.backend.entity.AccessLog
+import com.comcombine.backend.service.AccessLogService
 import com.comcombine.backend.service.UserService
 import lombok.extern.slf4j.Slf4j
 import org.apache.logging.slf4j.SLF4JLogger
@@ -13,14 +15,14 @@ import org.springframework.stereotype.Component
 @Component
 @Aspect
 @Slf4j
-class UserLogAspect(private val logService: LogService, private val userService: UserService) {
+class UserLogAspect(private val logService: LogService, private val userService: UserService, private val accessLogService: AccessLogService) {
     private val log = LoggerFactory.getLogger(javaClass)
-    @Pointcut("execution(* com.comcombine.backend.controller.*.*(..,!int))")
+    @Pointcut("execution(* com.comcombine.backend.controller.*.*(..,!Long))")
     fun noAuthUserRequest(){}
-    @Pointcut("execution(* com.comcombine.backend.controller.*.*(int,..))")
+    @Pointcut("execution(* com.comcombine.backend.controller.*.*(Long,..))")
     fun authUserRequest(){}
 
-    @Around("noAuthUserRequest()")
+    @Around("noAuthUserRequest() && !@annotation(com.comcombine.backend.config.annotation.AuthPoint)")
     fun beforeNoAuthUserLog(joinPoint: ProceedingJoinPoint) : Any {
         val cls : Class<*> = joinPoint.target.javaClass
         val result: Any
@@ -28,11 +30,15 @@ class UserLogAspect(private val logService: LogService, private val userService:
             result = joinPoint.proceed(joinPoint.args)
             return result
         } finally {
+            accessLogService.save(AccessLog(
+                email = "NON_USER",
+                log = "ENTER "+logService.getRequestUrl(joinPoint,cls)+"\tParams: "+logService.params(joinPoint)
+            ))
             log.info("ENTER "+logService.getRequestUrl(joinPoint,cls)+"\tParams: "+logService.params(joinPoint))
         }
     }
 
-    @Around("authUserRequest()")
+    @Around("@annotation(com.comcombine.backend.config.annotation.AuthPoint)")
     fun beforeAuthUserLog(joinPoint:ProceedingJoinPoint):Any {
         val cls: Class<*> = joinPoint.target.javaClass
         val result: Any
@@ -42,6 +48,10 @@ class UserLogAspect(private val logService: LogService, private val userService:
             result = joinPoint.proceed(joinPoint.args)
             return result
         } finally {
+            accessLogService.save(AccessLog(
+                email = email,
+                log = "ENTER Member: $email"+"\t"+logService.getRequestUrl(joinPoint,cls)+"\tParams: "+logService.params(joinPoint)
+            ))
             log.info("ENTER Member: $email"+"\t"+logService.getRequestUrl(joinPoint,cls)+"\tParams: "+logService.params(joinPoint))
         }
     }

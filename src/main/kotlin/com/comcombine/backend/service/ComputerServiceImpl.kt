@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 @Service
 class ComputerServiceImpl(private val computerRepository: ComputerRepository, private val userRepository: UserRepository):ComputerService {
     override fun getComputerList(): List<Computer> {
-        TODO("Not yet implemented")
+        return computerRepository.findAll()
     }
 
     override fun getComputerList(type: String?, name: String?): List<Computer> {

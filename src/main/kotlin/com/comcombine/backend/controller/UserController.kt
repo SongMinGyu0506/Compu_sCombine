@@ -1,5 +1,6 @@
 package com.comcombine.backend.controller
 
+import com.comcombine.backend.config.annotation.AuthPoint
 import com.comcombine.backend.config.except.UserConflictException
 import com.comcombine.backend.config.response.ResponseEntityWrapper
 import com.comcombine.backend.dto.UserDto
@@ -48,6 +49,7 @@ class UserController(private val userService: UserService) {
         return ResponseEntityWrapper.okResponse(login)
     }
 
+    @AuthPoint
     @DeleteMapping("")
     @Operation(summary = "로그아웃", description = "로그아웃 메서드, JWT 토큰 삭제")
     @ApiResponses(value = [

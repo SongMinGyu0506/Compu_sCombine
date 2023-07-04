@@ -12,5 +12,5 @@ open class User(
 
     @OneToMany(cascade = [CascadeType.ALL])
     open var computers: MutableList<Computer> = mutableListOf()
-    ) {
+    ):DateAudit() {
 }
